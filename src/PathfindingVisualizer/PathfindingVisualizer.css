@@ -1,3 +1,23 @@
 .grid {
-    margin: 400px 0 0;
+    margin: 100px 0 0;
+}
+
+#header {
+    height: 200px;
+    width: 100%;
+    background-color: rgb(6, 33, 97);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.visualize-button {
+    background-color: rgb(88, 184, 122);
+    border-radius: 7px;
+    border: none;
+    padding: 30px 20px;
+    color: white;
+    text-align: center;
+    display: inline-block;
+    font-size: 20px;
 }
