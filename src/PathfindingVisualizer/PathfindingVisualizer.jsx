@@ -1,13 +1,14 @@
 import React, {Component} from "react";
 import Node from './Node/Node';
 import {dijkstra, getNodesInShortestPathOrder} from '../algorithms/dijkstra';
+import {Astar} from '../algorithms/astar';
 
 import "./PathfindingVisualizer.css";
 
 const START_ROW = 10;
 const START_COL = 15;
 const END_ROW = 10;
-const END_COL = 35;
+const END_COL = 25;
 
 export default class PathfindingVisualizer extends Component {
   constructor() {
@@ -21,6 +22,20 @@ export default class PathfindingVisualizer extends Component {
   componentDidMount() {
     const grid = createGrid();
     this.setState({grid})
+  }
+  
+  resetGrid(){
+    const grid = createGrid();
+    this.setState({grid})
+    for (let row = 0; row < 20; row++){
+      const currentRow = [];
+      for (let col =0; col < 50; col++){
+        let node = grid[row][col];
+        document.getElementById(`node-${node.row}-${node.col}`).className ='node';
+      }
+    }
+    document.getElementById(`node-${START_ROW}-${START_COL}`).className ='node node-start';
+    document.getElementById(`node-${END_ROW}-${END_COL}`).className ='node node-end';
   }
 
   handleMouseDown(row,col) {
@@ -72,13 +87,28 @@ export default class PathfindingVisualizer extends Component {
     this.animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
   }
 
+  visualizeAstar() {
+    const {grid} = this.state;
+    const startNode = grid[START_ROW][START_COL];
+    const finishNode = grid[END_ROW][END_COL];
+    const visitedNodesInOrder = Astar(grid, startNode, finishNode);
+    const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode);
+    this.animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
+  }
+
   render() {
     const {grid, mouseIsPressed} = this.state;
-    console.log(grid)
+    //console.log(grid)
     return (
       <><div id="header">
           <button className="visualize-button" onClick={() => this.visualizeDijkstra()}>
-            Visualize!
+            Visualize Dijkstra!
+          </button>
+          <button className="visualize-button" onClick={() => this.visualizeAstar()}>
+            Visualize A *!
+          </button>
+          <button className="visualize-button" onClick={() => this.resetGrid()}>
+            Reset!
           </button>
         </div>
         <div className="grid">
@@ -132,6 +162,7 @@ const createNode = (col, row) => {
     isVisited: false,
     isWall: false,
     previousNode: null,
+    fScore: Infinity,
   };
 }
 

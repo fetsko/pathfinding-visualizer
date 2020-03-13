@@ -1,9 +1,9 @@
 export function dijkstra(grid, start, finishNode){
-    let visitedNodesInOrder = [];      //new PriorityQueue(grid.length * grid[0].length)
+    let visitedNodesInOrder = [];
     start.distance = 0;
     const unvisitedNodes = getAllNodes(grid)
     while (!!unvisitedNodes.length){
-        sortNodesByDistance(unvisitedNodes);
+        unvisitedNodes.sort((nodeA, nodeB) => nodeA.distance - nodeB.distance);
         const closestNode = unvisitedNodes.shift();
         if (closestNode.isWall) continue;
         if (closestNode.distance === Infinity) return visitedNodesInOrder;
@@ -15,7 +15,6 @@ export function dijkstra(grid, start, finishNode){
 }
 
 
-
 function getAllNodes(grid){
     const nodes = [];
     for (const row of grid){
@@ -24,10 +23,6 @@ function getAllNodes(grid){
         }
     }
     return nodes;
-}
-
-function sortNodesByDistance(unvisitedNodes){
-    unvisitedNodes.sort((nodeA, nodeB) => nodeA.distance - nodeB.distance);
 }
 
 function getUnvisitedNeighbors(node, grid){
